@@ -39,5 +39,13 @@ OpenSSL 1.0.0 대 버전
 OpenSSL 1.0.1 대 버전    
 이 중 CVE-2014-0221은 비정상적인 DTLS 핸드셰이크를 OpenSSL DTLS 클라이언트에 전송하여 서비스 거부 공격이 가능한 취약점     
  
+## 알아본 CVE-2014-0221
 
- 
+< DTLS 서비스거부 취약점(CVE-2014-0221) >   
+o DTLS(Datagram Transport Layer Security)는 TLS를 기반으로 하여암호화된 데이터그램을 전송하게 해주는 프로토콜     
+o 비정상적인 DTLS 핸드쉐이크 메시지(DTLS Hello 메시지)를 DTLS클라이언트에 전송할 경우, OpenSSL이 재귀상태에 빠질 수 있도록 구현되어 서비스 거부 공격이 가능     
+- DTLS Hello 메시지를 처리하면서 함수 자신을 재귀호출
+
+
+
+
