@@ -45,7 +45,22 @@ OpenSSL 1.0.1 대 버전
 o DTLS(Datagram Transport Layer Security)는 TLS를 기반으로 하여암호화된 데이터그램을 전송하게 해주는 프로토콜     
 o 비정상적인 DTLS 핸드쉐이크 메시지(DTLS Hello 메시지)를 DTLS클라이언트에 전송할 경우, OpenSSL이 재귀상태에 빠질 수 있도록 구현되어 서비스 거부 공격이 가능     
 - DTLS Hello 메시지를 처리하면서 함수 자신을 재귀호출
+#### 예시코드 dtls1_get_message_frament method의 재귀호출 부분 예시
+```
+if(!s->server && s->d1->r_msg_hdr.frag_off == 0 && wire[0] == SSL3_MT_HELLO_REQUEST) {
+    if(wire[1] == 0 && wire[2] == 0 && wire[3] == 0) {
+        if(s->msg_callback)
+            s->msg_callback(0, s->version, SSL3_RT_HANDSHAKE,
+                wire, DTLS1_HM_HEADER_LENGTH, s, s->msg_callback_arg);
 
-
-
+            s->init_num = 0;
+            return dtls1_get_message_fragment(s, st1, stn, max, ok);
+    }
+    else {
+        al=SSL_AD_UNEXPECTED_MESSAGE;
+        SSLerr(SSL_F_DTLS1_GET_MESSAGE_FRAGMENT,SSL_R_UNEXPECTED_MESSAGE);
+        goto f_err;
+    }
+}
+```
 
